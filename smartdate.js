@@ -3,17 +3,21 @@
   'use strict';
 
   var smartdate = {
-    version: '0.2.0',
+    version: '0.3.0',
 
-    language: 'en',
+    config: {
+      language: 'en',
 
-    tagName: 'span',
+      tagName: 'span',
 
-    className: 'smartdate',
+      className: 'smartdate',
 
-    timestampAttr: 'timestamp',
+      timestampAttr: 'timestamp',
 
-    addTitle: true
+      addTitle: true,
+
+      updateInterval: 5000
+    }
   };
 
   var daysBetween = smartdate.daysBetween = function(date1, date2) {
@@ -129,23 +133,37 @@
   };
 
   smartdate.render = function() {
-    var selector = smartdate.tagName + '.' + smartdate.className;
-    var elements = document.querySelectorAll(selector);
+    var language = smartdate.config.language,
+        selector = smartdate.config.tagName + '.' + smartdate.config.className,
+        elements = document.querySelectorAll(selector);
     Array.prototype.forEach.call(elements, function(el) {
-      var timestamp = el.getAttribute('data-' + smartdate.timestampAttr);
-      var date = new Date(timestamp * 1000);
+      var timestamp = el.getAttribute('data-' + smartdate.config.timestampAttr),
+          date = new Date(timestamp * 1000);
 
-      var dateText = smartdate.sinceNow(date);
+      var dateText = smartdate.sinceNow(date, language);
       if (!dateText) {
-        dateText = smartdate.dateFormat(date);
-        smartdate.removeClass(el, smartdate.className);
+        dateText = smartdate.dateFormat(date, language);
+        smartdate.removeClass(el, smartdate.config.className);
       }
 
       el.innerHTML = dateText;
-      if (smartdate.addTitle) {
+      if (smartdate.config.addTitle) {
         el.setAttribute('title', date.toLocaleString());
       }
     });
+  };
+
+  smartdate.init = function(options) {
+    options = options || {};
+    for (var o in options) {
+      if (options.hasOwnProperty(o)) {
+        smartdate.config[o] = options[o];
+      }
+    }
+    smartdate.render();
+    if (smartdate.config.updateInterval) {
+      window.setInterval(smartdate.render, smartdate.config.updateInterval);
+    }
   };
 
   if (typeof define === 'function' && define.amd) {
