@@ -99,6 +99,8 @@ as following:
 All configuration options:
 
 * language - 'en' or 'ru'. Default is 'en';
+* fullMonthNames - true or false, default is false. Use full or short month
+  names;
 * tagName - tag type to look for. Default is 'span';
 * className - tag class to look for. Default is 'smartdate';
 * timestampAttr - name of 'data-' attribute in which unix timestamps are

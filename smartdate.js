@@ -3,7 +3,7 @@
   'use strict';
 
   var smartdate = {
-    version: '0.3.0',
+    version: '0.4.0',
 
     config: {
       language: 'en',
@@ -16,7 +16,9 @@
 
       addTitle: true,
 
-      updateInterval: 5000
+      updateInterval: 5000,
+
+      fullMonthNames: false
     }
   };
 
@@ -50,9 +52,20 @@
 
   smartdate.locale = {
     'en': {
+      months: [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ],
+
+      monthsShort: [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ],
+
       dateFormat: function(dt) {
-        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var months = smartdate.config.fullMonthNames ?
+            this.months :
+            this.monthsShort;
         return months[dt.getMonth()] + ' ' +
             dt.getDate() + ', ' +
             dt.getFullYear();
@@ -75,9 +88,20 @@
     },
 
     'ru': {
+      months: [
+        'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+        'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+      ],
+
+      monthsShort: [
+        'янв', 'фев', 'мар', 'апр', 'мая', 'июн',
+        'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'
+      ],
+
       dateFormat: function(dt) {
-        var months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн',
-                      'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+        var months = smartdate.config.fullMonthNames ?
+            this.months :
+            this.monthsShort;
         return dt.getDate() + ' ' +
             months[dt.getMonth()] + ' ' +
             dt.getFullYear();
