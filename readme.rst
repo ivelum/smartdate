@@ -1,7 +1,7 @@
-Smartdate.js
+smartdate.js
 ============
 
-Smartdate.js is a lightweight (<3KB minified) dependency-free library for
+smartdate.js is a lightweight (<3KB minified) dependency-free library for
 displaying date and time in users' timezones, in human-friendly format.
 Datetime string is updated dynamically without page reload. This is
 fast, tested with hundreds of date objects on a single page.
@@ -50,7 +50,7 @@ with Bower::
 Usage
 -----
 
-Smartdate.js looks for tags of pre-defined type and class on your page,
+smartdate.js looks for tags of pre-defined type and class on your page,
 gets Unix timestamp (in seconds) from them and replaces tag contents to
 date time string.
 
@@ -60,7 +60,9 @@ Add as many datetimes to your page as needed in the following format:
 
     <span class="smartdate" data-timestamp="1418734998"></span>
 
-Initialize Smartdate.js (once per page, no matter how many datetimes you added):
+Initialize smartdate.js by calling smartdate.init(). This needs to be done
+only once, no matter how many datetime tags you added. The best place for this
+code is the end of the page, below all datetime tags:
 
 .. code:: html
 
