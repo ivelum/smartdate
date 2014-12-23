@@ -3,7 +3,7 @@
   'use strict';
 
   var smartdate = {
-    version: '0.4.0',
+    version: '0.4.1',
 
     config: {
       language: 'en',
@@ -159,12 +159,17 @@
   smartdate.render = function() {
     var language = smartdate.config.language,
         selector = smartdate.config.tagName + '.' + smartdate.config.className,
-        elements = document.querySelectorAll(selector);
-    Array.prototype.forEach.call(elements, function(el) {
-      var timestamp = el.getAttribute('data-' + smartdate.config.timestampAttr),
-          date = new Date(timestamp * 1000);
+        elements = document.querySelectorAll(selector),
+        el,
+        timestamp,
+        date,
+        dateText;
+    for (var i = 0, l = elements.length; i < l; i++) {
+      el = elements[i];
+      timestamp = el.getAttribute('data-' + smartdate.config.timestampAttr);
+      date = new Date(timestamp * 1000);
 
-      var dateText = smartdate.sinceNow(date, language);
+      dateText = smartdate.sinceNow(date, language);
       if (!dateText) {
         dateText = smartdate.dateFormat(date, language);
         smartdate.removeClass(el, smartdate.config.className);
@@ -174,7 +179,7 @@
       if (smartdate.config.addTitle) {
         el.setAttribute('title', date.toLocaleString());
       }
-    });
+    }
   };
 
   smartdate.init = function(options) {
