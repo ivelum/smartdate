@@ -1,6 +1,6 @@
 # smartdate.js
 
-smartdate.js is a lightweight (\<3KB minified) dependency-free library
+smartdate.js is a lightweight (<3KB minified) dependency-free library
 for displaying date and time in users’ timezones, in human-friendly
 format. Datetime string is updated dynamically without page reload. This
 is fast, tested with hundreds of date objects on a single page.
