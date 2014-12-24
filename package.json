@@ -1,0 +1,33 @@
+{
+  "name": "smartdate",
+  "version": "0.5.0",
+  "description": "smartdate.js - localized human-friendly datetime in browser",
+  "main": "smartdate.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ivelum/smartdate.git"
+  },
+  "keywords": [
+    "smartdate"
+  ],
+  "author": {
+    "name": "Denis Stebunov",
+    "url": "https://github.com/stebunovd"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.githubusercontent.com/ivelum/smartdate/master/LICENSE"
+    }
+  ],
+  "files": [
+    "smartdate.js",
+    "smartdate.min.js",
+    "LICENSE"
+  ],
+  "bugs": {
+    "url": "https://github.com/ivelum/smartdate/issues"
+  },
+  "homepage": "https://github.com/ivelum/smartdate"
+}

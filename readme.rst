@@ -47,6 +47,11 @@ with Bower::
     bower install smartdate
 
 
+or, if you're using npm::
+
+    npm install smartdate
+
+
 Usage
 -----
 
