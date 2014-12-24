@@ -1,7 +1,7 @@
 # smartdate.js
 
-smartdate.js is a lightweight (<3KB minified) dependency-free library
-for displaying date and time in users’ timezones, in human-friendly
+smartdate.js is a lightweight (<4KB minified) dependency-free library
+for displaying date and time in users' timezones, in human-friendly
 format. Datetime string is updated dynamically without page reload. This
 is fast, tested with hundreds of date objects on a single page.
 
@@ -12,11 +12,15 @@ Opera.
 
 ## Example output
 
-Examples of what your users will see (text will be updated dynamically
-as time goes by):
+Examples of what your users could see:
 
 English:
 
+- Dec 7, 2014
+- tomorrow at 6:42 am
+- today at 3:14 pm
+- in 2 min
+- in less than a minute
 - less than a minute ago
 - 12 min ago
 - today at 1:07 am
@@ -25,11 +29,19 @@ English:
 
 Russian:
 
+- 7 дек 2014
+- завтра в 06:42
+- сегодня в 15:14
+- через 2 мин
+- в течение минуты
 - менее 1 мин назад
 - 12 мин назад
 - сегодня в 01:07
 - вчера в 21:40
 - 3 дек 2014
+
+Text is updated dynamically as time goes by:
+> in 2 min -> in 1 min -> in less than a minute -> less than a minute ago -> ... 
 
 Datetime tags can also have a title attribute with full date time string
 in user timezone and locale (displayed on mouse over). This is a
@@ -44,7 +56,7 @@ install with Bower:
 bower install smartdate
 ```
 
-or, if you’re using npm:
+or, if you're using npm:
 
 ```sh
 npm install smartdate
@@ -73,7 +85,7 @@ place for this code is the end of the page, below all datetime tags:
 </script>
 ```
 
-or, if you’re using RequireJS:
+or, if you're using RequireJS:
 
 ```html
 <script>
@@ -89,7 +101,7 @@ and schedules itself to update them every 5 seconds (configurable).
 ## Configuration options
 
 smartdate.init() takes an optional parameter, object with configuration
-options. For example, if you’d like to switch language to Russian,
+options. For example, if you'd like to switch language to Russian,
 initialize smartdate as following:
 
 ```js
@@ -100,16 +112,32 @@ smartdate.init({
 
 All configuration options:
 
-- language - ‘en’ or ‘ru’. Default is ‘en’;
+- language - 'en' or 'ru'. Default is 'en';
+- mode - 'auto', 'dates', 'past' or 'future'. Default is 'auto'. Defines how
+  smartdate renders datetime text. 
+    * auto - use human-friendly time string for nearest date and time, 
+      from yesterday to tomorrow, like shown on examples above. Use date, 
+      if date is outside of yesterday <-> tomorrow interval;
+    * dates -  always show dates, even for nearest date and time; 
+    * past - prevent future dates from being shown. If the date is in the 
+      future, 'less than a minute ago' will be shown (or its equivalent in 
+      Russian). This could be helpful to deal with inaccurate clock on user
+      machines. For example, if your app shows timestamps for article comments,
+      and user clock is behind server clock by 5 minutes, the most recent 
+      comments could be shown for her as coming from future - 'in 5 min', and
+      this could be confusing. Set mode to 'past' to fix this.
+    * future - opposite to 'past', prevents past dates from being shown. If the 
+      date is in the past, 'in less than a minute' will be shown (or its 
+      equivalent in Russian).
 - fullMonthNames - true or false, default is false. Use full or short
   month names;
-- tagName - tag type to look for. Default is ‘span’;
-- className - tag class to look for. Default is ‘smartdate’;
-- timestampAttr - name of ‘data-’ attribute in which unix timestamps
-  are stored. Default is ‘timestamp’, so full attribute name is
-  ‘data-timestamp’;
+- tagName - tag type to look for. Default is 'span';
+- className - tag class to look for. Default is 'smartdate';
+- timestampAttr - name of 'data-' attribute in which unix timestamps
+  are stored. Default is 'timestamp', so full attribute name is
+  'data-timestamp';
 - addTitle - true or false, default is true. Tells smartdate to add
-  title attribute with full datetime string in users’ locale;
+  title attribute with full datetime string in users' locale;
 - updateInterval - interval in milliseconds, how often should smartdate update
   datetime tags. Default is 5000 (5 seconds). Set it to null if you'd like
   to disable auto-update.

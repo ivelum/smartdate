@@ -17,7 +17,7 @@
   'use strict';
 
   var smartdate = {
-    version: '0.5.0',
+    version: '0.6.0',
 
     config: {
       language: 'en',
@@ -32,7 +32,9 @@
 
       updateInterval: 5000,
 
-      fullMonthNames: false
+      fullMonthNames: false,
+
+      mode: 'auto'  // also available: 'past', 'future' or 'dates'
     }
   };
 
@@ -76,16 +78,14 @@
         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
       ],
 
-      dateFormat: function(dt) {
-        var months = smartdate.config.fullMonthNames ?
-            this.months :
-            this.monthsShort;
+      dateFormat: function(dt, fullMonthNames) {
+        var months = fullMonthNames ? this.months : this.monthsShort;
         return months[dt.getMonth()] + ' ' +
             dt.getDate() + ', ' +
             dt.getFullYear();
       },
 
-      sinceNow: function(date) {
+      pastFormat: function(date) {
         var now = new Date();
         var sec = (now.getTime() - date.getTime()) / 1000;
 
@@ -97,6 +97,21 @@
           return 'today at ' + formatAMPM(date);
         } else if (daysBetween(now, date) === -1) {
           return 'yesterday at ' + formatAMPM(date);
+        }
+      },
+
+      futureFormat: function(date) {
+        var now = new Date();
+        var sec = (date.getTime() - now.getTime()) / 1000;
+
+        if (sec < 60) {
+          return 'in less than a minute';
+        } else if (sec < 60 * 60) {
+          return 'in ' + Math.floor(sec / 60) + ' min';
+        } else if (daysBetween(now, date) === 0) {
+          return 'today at ' + formatAMPM(date);
+        } else if (daysBetween(now, date) === 1) {
+          return 'tomorrow at ' + formatAMPM(date);
         }
       }
     },
@@ -112,16 +127,14 @@
         'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'
       ],
 
-      dateFormat: function(dt) {
-        var months = smartdate.config.fullMonthNames ?
-            this.months :
-            this.monthsShort;
+      dateFormat: function(dt, fullMonthNames) {
+        var months = fullMonthNames ? this.months : this.monthsShort;
         return dt.getDate() + ' ' +
             months[dt.getMonth()] + ' ' +
             dt.getFullYear();
       },
 
-      sinceNow: function(date) {
+      pastFormat: function(date) {
         var now = new Date();
         var sec = (now.getTime() - date.getTime()) / 1000;
 
@@ -136,11 +149,29 @@
           return 'вчера в ' + pad(date.getHours()) +
               ':' + pad(date.getMinutes());
         }
+      },
+
+      futureFormat: function(date) {
+        var now = new Date();
+        var sec = (date.getTime() - now.getTime()) / 1000;
+
+        if (sec < 60) {
+          return 'в течение минуты';
+        } else if (sec < 60 * 60) {
+          return 'через ' + Math.floor(sec / 60) + ' мин';
+        } else if (daysBetween(now, date) === 0) {
+          return 'сегодня в ' + pad(date.getHours()) +
+              ':' + pad(date.getMinutes());
+        } else if (daysBetween(now, date) === 1) {
+          return 'завтра в ' + pad(date.getHours()) +
+              ':' + pad(date.getMinutes());
+        }
       }
     }
   };
 
-  smartdate.getLocale = function(language) {  // 'en' is default
+  smartdate.getLocale = function(language) {
+    language = language || smartdate.config.language;
     if (typeof language === 'string') {
       language = language.toLowerCase();
       if (smartdate.locale.hasOwnProperty(language)) {
@@ -150,12 +181,17 @@
     return smartdate.locale['en'];
   };
 
-  smartdate.sinceNow = function(date, language) {  // language is optional
-    return smartdate.getLocale(language).sinceNow(date);
+  smartdate.pastFormat = function(date, language) {
+    return smartdate.getLocale(language).pastFormat(date);
   };
 
-  smartdate.dateFormat = function(date, language) {  // language is optional
-    return smartdate.getLocale(language).dateFormat(date);
+  smartdate.futureFormat = function(date, language) {
+    return smartdate.getLocale(language).futureFormat(date);
+  };
+
+  smartdate.dateFormat = function(date, fullMonthNames, language) {
+    fullMonthNames = fullMonthNames || smartdate.config.fullMonthNames;
+    return smartdate.getLocale(language).dateFormat(date, fullMonthNames);
   };
 
   smartdate.removeClass = function(el, className) {  // Works in IE8+
@@ -171,21 +207,37 @@
   };
 
   smartdate.render = function() {
-    var language = smartdate.config.language,
+    var fullMonthNames = smartdate.config.fullMonthNames,
+        locale = smartdate.getLocale(),
+        mode = smartdate.config.mode,
         selector = smartdate.config.tagName + '.' + smartdate.config.className,
         elements = document.querySelectorAll(selector),
         el,
         timestamp,
         date,
-        dateText;
+        dateText,
+        nowTimestamp = (new Date()).getTime() / 1000;
     for (var i = 0, l = elements.length; i < l; i++) {
       el = elements[i];
-      timestamp = el.getAttribute('data-' + smartdate.config.timestampAttr);
+      timestamp = +el.getAttribute('data-' + smartdate.config.timestampAttr);
       date = new Date(timestamp * 1000);
 
-      dateText = smartdate.sinceNow(date, language);
+      dateText = null;
+      if (mode !== 'dates') {
+        if (mode === 'past') {
+          timestamp = nowTimestamp - 1;
+        } else if (mode === 'future') {
+          timestamp = nowTimestamp + 1;
+        }
+        if (timestamp > nowTimestamp) {
+          dateText = locale.futureFormat(date);
+        } else {
+          dateText = locale.pastFormat(date);
+        }
+      }
+
       if (!dateText) {
-        dateText = smartdate.dateFormat(date, language);
+        dateText = locale.dateFormat(date, fullMonthNames);
         smartdate.removeClass(el, smartdate.config.className);
       }
 
