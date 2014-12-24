@@ -112,35 +112,35 @@ smartdate.init({
 
 All configuration options:
 
-- language - 'en' or 'ru'. Default is 'en';
-- mode - 'auto', 'dates', 'past' or 'future'. Default is 'auto'. Defines how
+- **language** - 'en' or 'ru'. Default is 'en';
+- **mode** - 'auto', 'dates', 'past' or 'future'. Default is 'auto'. Defines how
   smartdate renders datetime text. 
-    * auto - use human-friendly time string for nearest date and time, 
+    * *auto* - use human-friendly time string for nearest date and time, 
       from yesterday to tomorrow, like shown on examples above. Use date, 
       if date is outside of yesterday <-> tomorrow interval;
-    * dates -  always show dates, even for nearest date and time; 
-    * past - prevent future dates from being shown. If the date is in the 
+    * *dates* -  always show dates, even for nearest date and time; 
+    * *past* - prevent future dates from being shown. If the date is in the 
       future, 'less than a minute ago' will be shown (or its equivalent in 
       Russian). This could be helpful to deal with inaccurate clock on user
       machines. For example, if your app shows timestamps for article comments,
       and user clock is behind server clock by 5 minutes, the most recent 
       comments could be shown for her as coming from future - 'in 5 min', and
       this could be confusing. Set mode to 'past' to fix this.
-    * future - opposite to 'past', prevents past dates from being shown. If the 
-      date is in the past, 'in less than a minute' will be shown (or its 
+    * *future* - opposite to *past*, prevents past dates from being shown. If 
+      the date is in the past, 'in less than a minute' will be shown (or its 
       equivalent in Russian).
-- fullMonthNames - true or false, default is false. Use full or short
+- **fullMonthNames** - *true* or *false*, default is *false*. Use full or short
   month names;
-- tagName - tag type to look for. Default is 'span';
-- className - tag class to look for. Default is 'smartdate';
-- timestampAttr - name of 'data-' attribute in which unix timestamps
+- **tagName** - tag type to look for. Default is 'span';
+- **className** - tag class to look for. Default is 'smartdate';
+- **timestampAttr** - name of 'data-' attribute in which unix timestamps
   are stored. Default is 'timestamp', so full attribute name is
   'data-timestamp';
-- addTitle - true or false, default is true. Tells smartdate to add
+- **addTitle** - true or false, default is true. Tells smartdate to add
   title attribute with full datetime string in users' locale;
-- updateInterval - interval in milliseconds, how often should smartdate update
-  datetime tags. Default is 5000 (5 seconds). Set it to null if you'd like
-  to disable auto-update.
+- **updateInterval** - interval in milliseconds, how often should smartdate 
+  update datetime tags. Default is 5000 (5 seconds). Set it to null if you'd 
+  like to disable auto-update.
   
 ## Low-level API
 
