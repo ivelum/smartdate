@@ -1,6 +1,6 @@
 {
   "name": "smartdate",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "smartdate.js - localized human-friendly datetime in browser",
   "main": "smartdate.js",
   "scripts": {},
