@@ -131,6 +131,8 @@ All configuration options:
       equivalent in Russian).
 - **fullMonthNames** - *true* or *false*, default is *false*. Use full or short
   month names;
+- **capitalize** - *true* or *false*, default is *false*. Tells smartdate to
+  capitalize produced date strings;
 - **tagName** - tag type to look for. Default is 'span';
 - **className** - tag class to look for. Default is 'smartdate';
 - **timestampAttr** - name of 'data-' attribute in which unix timestamps

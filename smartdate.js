@@ -34,6 +34,8 @@
 
       fullMonthNames: false,
 
+      capitalize: false,
+
       mode: 'auto'  // also available: 'past', 'future' or 'date'
     }
   };
@@ -214,7 +216,11 @@
         dateText = locale.pastFormat(date);
       }
     }
-    return dateText || locale.dateFormat(date, config.fullMonthNames);
+    dateText = dateText || locale.dateFormat(date, config.fullMonthNames);
+    if (config.capitalize) {
+      dateText = dateText.charAt(0).toUpperCase() + dateText.slice(1);
+    }
+    return dateText;
   };
 
   smartdate.render = function() {
