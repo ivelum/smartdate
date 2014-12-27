@@ -181,67 +181,53 @@
     return smartdate.locale['en'];
   };
 
-  smartdate.pastFormat = function(date, language) {
-    return smartdate.getLocale(language).pastFormat(date);
-  };
-
-  smartdate.futureFormat = function(date, language) {
-    return smartdate.getLocale(language).futureFormat(date);
-  };
-
-  smartdate.dateFormat = function(date, fullMonthNames, language) {
-    fullMonthNames = fullMonthNames || smartdate.config.fullMonthNames;
-    return smartdate.getLocale(language).dateFormat(date, fullMonthNames);
-  };
-
-  smartdate.removeClass = function(el, className) {  // Works in IE8+
-    if (el.classList) {
-      el.classList.remove(className);
-    } else {
-      el.className = el.className.replace(
-          new RegExp('(^|\\b)' +
-              className.split(' ').join('|') +
-              '(\\b|$)', 'gi'), ' '
-      );
+  /**
+   * String format of Date object or unix timestamp using current settings
+   *
+   * @param {Date|number} date - Date object or unix timestamp (in seconds)
+   * @return {string|null} - string representation of date made with current
+   *                         format and language settings,
+   *                         or null if input is incorrect
+   */
+  smartdate.format = function(date) {
+    if (!(date instanceof Date)) {
+      date = +date;  // convert to int
+      if (isNaN(date)) {
+        return null;
+      }
+      date = new Date(date * 1000);
     }
+    var dateText = null,
+        locale = smartdate.getLocale(),
+        config = smartdate.config,
+        nowTimestamp = (new Date()).getTime(),
+        timestamp = date.getTime();
+    if (config.mode !== 'dates') {
+      if (config.mode === 'past') {
+        timestamp = nowTimestamp - 1;
+      } else if (config.mode === 'future') {
+        timestamp = nowTimestamp + 1;
+      }
+      if (timestamp > nowTimestamp) {
+        dateText = locale.futureFormat(date);
+      } else {
+        dateText = locale.pastFormat(date);
+      }
+    }
+    return dateText || locale.dateFormat(date, config.fullMonthNames);
   };
 
   smartdate.render = function() {
-    var fullMonthNames = smartdate.config.fullMonthNames,
-        locale = smartdate.getLocale(),
-        mode = smartdate.config.mode,
-        selector = smartdate.config.tagName + '.' + smartdate.config.className,
+    var selector = smartdate.config.tagName + '.' + smartdate.config.className,
         elements = document.querySelectorAll(selector),
         el,
         timestamp,
-        date,
-        dateText,
-        nowTimestamp = (new Date()).getTime() / 1000;
+        date;
     for (var i = 0, l = elements.length; i < l; i++) {
       el = elements[i];
       timestamp = +el.getAttribute('data-' + smartdate.config.timestampAttr);
       date = new Date(timestamp * 1000);
-
-      dateText = null;
-      if (mode !== 'dates') {
-        if (mode === 'past') {
-          timestamp = nowTimestamp - 1;
-        } else if (mode === 'future') {
-          timestamp = nowTimestamp + 1;
-        }
-        if (timestamp > nowTimestamp) {
-          dateText = locale.futureFormat(date);
-        } else {
-          dateText = locale.pastFormat(date);
-        }
-      }
-
-      if (!dateText) {
-        dateText = locale.dateFormat(date, fullMonthNames);
-        smartdate.removeClass(el, smartdate.config.className);
-      }
-
-      el.innerHTML = dateText;
+      el.innerHTML = smartdate.format(date);
       if (smartdate.config.addTitle) {
         el.setAttribute('title', date.toLocaleString());
       }
