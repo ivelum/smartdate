@@ -113,12 +113,12 @@ smartdate.init({
 All configuration options:
 
 - **language** - 'en' or 'ru'. Default is 'en';
-- **mode** - 'auto', 'dates', 'past' or 'future'. Default is 'auto'. Defines how
+- **mode** - 'auto', 'date', 'past' or 'future'. Default is 'auto'. Defines how
   smartdate renders datetime text. 
     * *auto* - use human-friendly time string for nearest date and time, 
       from yesterday to tomorrow, like shown on examples above. Use date, 
       if date is outside of yesterday <-> tomorrow interval;
-    * *dates* -  always show dates, even for nearest date and time; 
+    * *date* -  always show dates, even for nearest date and time; 
     * *past* - prevent future dates from being shown. If the date is in the 
       future, 'less than a minute ago' will be shown (or its equivalent in 
       Russian). This could be helpful to deal with inaccurate clock on user

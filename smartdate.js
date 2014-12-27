@@ -34,7 +34,7 @@
 
       fullMonthNames: false,
 
-      mode: 'auto'  // also available: 'past', 'future' or 'dates'
+      mode: 'auto'  // also available: 'past', 'future' or 'date'
     }
   };
 
@@ -202,7 +202,7 @@
         config = smartdate.config,
         nowTimestamp = (new Date()).getTime(),
         timestamp = date.getTime();
-    if (config.mode !== 'dates') {
+    if (config.mode !== 'date') {
       if (config.mode === 'past') {
         timestamp = nowTimestamp - 1;
       } else if (config.mode === 'future') {
