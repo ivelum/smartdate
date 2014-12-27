@@ -234,13 +234,17 @@
     }
   };
 
-  smartdate.init = function(options) {
+  smartdate.setup = function(options) {
     options = options || {};
     for (var o in options) {
       if (options.hasOwnProperty(o)) {
         smartdate.config[o] = options[o];
       }
     }
+  };
+
+  smartdate.init = function(options) {
+    smartdate.setup(options);
     smartdate.render();
     if (smartdate.config.updateInterval) {
       window.setInterval(smartdate.render, smartdate.config.updateInterval);
