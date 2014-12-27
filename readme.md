@@ -142,16 +142,42 @@ All configuration options:
   update datetime tags. Default is 5000 (5 seconds). Set it to null if you'd 
   like to disable auto-update.
   
-## Low-level API
+## API
+
+```js
+smartdate.init()
+// or
+smartdate.init(paramsObj)
+```
+
+Inititalize smartdate. Takes an optional parameter, object with configuration
+options. It basically does the following:
+  1. performs parameters configuration using .setup(); 
+  2. immediately renders all date tags found on the page using .render() method;
+  3. schedules .render() to run every updateInterval milliseconds (optional). 
+See Usage and Configuration options above for details.
+
+```js
+smartdate.setup(paramsObj)
+```
+
+Configure smartdate. See Configuration options above for details.
+
+```js
+smartdate.format(date)
+```
+
+Returns string representation of a date using current format and language 
+settings. Input can be an instance of Date object or unix timestamp in seconds.
 
 ```js
 smartdate.render()
 ```
 
 If you update your page contents dynamically with JavaScript, you may want
-to update datetime strings right after you updated date tags on the
-page. In such case call smartdate.render() - this is exactly the same function
-which smartdate.init() uses internally to update everything.
+to update datetime strings right after you updated date tags on the page. 
+In such case call .render() - this is exactly the same function which .init() 
+uses internally to update everything.
 
 ## Report bugs
 
