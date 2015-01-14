@@ -68,6 +68,10 @@
     return hours + ':' + minutes + ' ' + ampm;
   };
 
+  smartdate.now = function() {
+    return new Date();
+  };
+
   smartdate.locale = {
     'en': {
       months: [
@@ -88,7 +92,7 @@
       },
 
       pastFormat: function(date) {
-        var now = new Date();
+        var now = smartdate.now();
         var sec = (now.getTime() - date.getTime()) / 1000;
 
         if (sec < 60) {
@@ -103,7 +107,7 @@
       },
 
       futureFormat: function(date) {
-        var now = new Date();
+        var now = smartdate.now();
         var sec = (date.getTime() - now.getTime()) / 1000;
 
         if (sec < 60) {
@@ -137,7 +141,7 @@
       },
 
       pastFormat: function(date) {
-        var now = new Date();
+        var now = smartdate.now();
         var sec = (now.getTime() - date.getTime()) / 1000;
 
         if (sec < 60) {
@@ -154,7 +158,7 @@
       },
 
       futureFormat: function(date) {
-        var now = new Date();
+        var now = smartdate.now();
         var sec = (date.getTime() - now.getTime()) / 1000;
 
         if (sec < 60) {
@@ -193,8 +197,10 @@
    */
   smartdate.format = function(date) {
     if (!(date instanceof Date)) {
-      date = +date;  // convert to int
-      if (isNaN(date)) {
+      if (typeof date === 'string') {
+        date = Number(date);
+      }
+      if (typeof date !== 'number' || isNaN(date)) {
         return null;
       }
       date = new Date(date * 1000);
@@ -202,7 +208,7 @@
     var dateText = null,
         locale = smartdate.getLocale(),
         config = smartdate.config,
-        nowTimestamp = (new Date()).getTime(),
+        nowTimestamp = smartdate.now().getTime(),
         timestamp = date.getTime();
     if (config.mode !== 'date') {
       if (config.mode === 'past') {
@@ -255,6 +261,16 @@
     if (smartdate.config.updateInterval) {
       window.setInterval(smartdate.render, smartdate.config.updateInterval);
     }
+  };
+
+  smartdate.tag = function(timestamp) {
+    if (timestamp instanceof Date) {
+      timestamp = timestamp.getTime() / 1000;
+    }
+    var tag = document.createElement(smartdate.config.tagName);
+    tag.className = smartdate.config.className;
+    tag.setAttribute('data-' + smartdate.config.timestampAttr, timestamp);
+    return tag;
   };
 
   return smartdate;

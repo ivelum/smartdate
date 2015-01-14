@@ -1,0 +1,12 @@
+{
+  "strict": true,
+  "node": true,
+  "curly": true,
+  "forin": true,
+  "newcap": true,
+  "noempty": true,
+  "nonew": true,
+  "undef": true,
+  "unused": true,
+  "predef": ["document", "window", "describe", "it"]
+}
