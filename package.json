@@ -3,22 +3,22 @@
   "version": "0.7.0",
   "description": "smartdate.js - localized human-friendly datetime in browser",
   "main": "smartdate.js",
-  "scripts": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/ivelum/smartdate.git"
   },
   "scripts": {
-    "start": "mochify --watch",
-    "phantom": "mochify",
-    "wd": "mochify --wd",
-    "cover": "mochify --cover",
-    "test": "npm run phantom && npm run wd && npm run cover"
+    "start": "node_modules/.bin/webpack --watch test/tests.js test/testBundle.js",
+    "build": "node_modules/.bin/webpack test/tests.js test/testBundle.js",
+    "phantom": "node_modules/.bin/webpack test/tests.js test/testBundle.js && node_modules/.bin/mocha-phantomjs test/tests.html"
   },
   "devDependencies": {
-    "mochify": "^2.1.1",
-    "object-assign": "^2.0.0",
-    "phantomjs": "^1.9.13"
+    "expect.js": "~0.3.1",
+    "merge": "~1.2.0",
+    "mocha": "~1.20.0",
+    "mocha-phantomjs": "~3.5.3",
+    "phantomjs": "~1.9.13",
+    "webpack": "~1.5.1"
   },
   "keywords": [
     "smartdate"

@@ -265,7 +265,7 @@
 
   smartdate.tag = function(timestamp) {
     if (timestamp instanceof Date) {
-      timestamp = timestamp.getTime() / 1000;
+      timestamp = Math.round(timestamp.getTime() / 1000);
     }
     var tag = document.createElement(smartdate.config.tagName);
     tag.className = smartdate.config.className;

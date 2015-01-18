@@ -1,5 +1,5 @@
 .DS_Store
 .idea
 readme.html
-test.html
 node_modules
+test/testBundle.js

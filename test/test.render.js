@@ -1,6 +1,6 @@
 'use strict';
 
-var assert = require('assert'),
+var expect = require('expect.js'),
     smartdate = require('../smartdate');
 
 describe('smartdate', function(){
@@ -18,14 +18,17 @@ describe('smartdate', function(){
   describe('render()', function(){
 
     it('should render a tag correctly with default settings', function(){
-      testArea.appendChild(smartdate.tag(new Date(2000, 0, 13, 13, 13, 13)));
-      assert.strictEqual(
-          testArea.innerHTML,
-          '<span class="smartdate" data-timestamp="947765593"></span>');
+      var el,
+          timestamp = 947765593,
+          date = new Date(timestamp * 1000);
+      testArea.appendChild(smartdate.tag(date));
+      el = testArea.childNodes[0];
+      expect(el.tagName.toLowerCase()).to.equal('span');
+      expect(el.className).to.equal('smartdate');
+      expect(el.getAttribute('data-timestamp')).to.eql(timestamp);
+      expect(el.innerHTML).to.equal('');
       smartdate.render();
-      assert.strictEqual(
-          document.querySelector('span.smartdate').innerHTML,
-          'Jan 13, 2000');
+      expect(el.innerHTML).to.equal('Jan 13, 2000');
     });
 
   });

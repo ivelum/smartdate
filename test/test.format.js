@@ -1,6 +1,6 @@
 'use strict';
 
-var assign = require('object-assign'),
+var merge = require('merge'),
     smartdate = require('../smartdate'),
     formatEn = require('./include/formatEn');
 
@@ -12,7 +12,7 @@ describe('smartdate', function(){
 
     before(function(){
       // save default config
-      originalConfig = assign({}, smartdate.config);
+      originalConfig = merge({}, smartdate.config);
       // mock and freeze now(), so tests always run in the same conditions
       originalNow = smartdate.now;
       smartdate.now = function() {
@@ -22,13 +22,13 @@ describe('smartdate', function(){
 
     beforeEach(function(){
       // restore default config
-      smartdate.config = assign({}, originalConfig);
+      smartdate.config = merge({}, originalConfig);
     });
 
     after(function(){
       // restore now() and config
       smartdate.now = originalNow;
-      smartdate.config = assign({}, originalConfig);
+      smartdate.config = merge({}, originalConfig);
     });
 
     formatEn(smartdate);
