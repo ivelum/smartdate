@@ -135,9 +135,6 @@ All configuration options:
   capitalize produced date strings;
 - **tagName** - tag type to look for. Default is 'span';
 - **className** - tag class to look for. Default is 'smartdate';
-- **timestampAttr** - name of 'data-' attribute in which unix timestamps
-  are stored. Default is 'timestamp', so full attribute name is
-  'data-timestamp';
 - **addTitle** - true or false, default is true. Tells smartdate to add
   title attribute with full datetime string in users' locale;
 - **updateInterval** - interval in milliseconds, how often should smartdate 

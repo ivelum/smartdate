@@ -26,8 +26,6 @@
 
       className: 'smartdate',
 
-      timestampAttr: 'timestamp',
-
       addTitle: true,
 
       updateInterval: 5000,
@@ -237,7 +235,7 @@
         date;
     for (var i = 0, l = elements.length; i < l; i++) {
       el = elements[i];
-      timestamp = +el.getAttribute('data-' + smartdate.config.timestampAttr);
+      timestamp = +el.getAttribute('data-timestamp');
       date = new Date(timestamp * 1000);
       el.innerHTML = smartdate.format(date);
       if (smartdate.config.addTitle) {
@@ -269,7 +267,7 @@
     }
     var tag = document.createElement(smartdate.config.tagName);
     tag.className = smartdate.config.className;
-    tag.setAttribute('data-' + smartdate.config.timestampAttr, timestamp);
+    tag.setAttribute('data-timestamp', timestamp);
     return tag;
   };
 
