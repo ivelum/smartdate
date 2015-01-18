@@ -261,13 +261,23 @@
     }
   };
 
-  smartdate.tag = function(timestamp) {
-    if (timestamp instanceof Date) {
-      timestamp = Math.round(timestamp.getTime() / 1000);
+  smartdate.tag = function(date) {
+    var tag,
+        timestamp;
+    if (date instanceof Date) {
+      timestamp = Math.round(date.getTime() / 1000);
+    } else {
+      // assuming unix timestamp in seconds
+      timestamp = date;
+      date = new Date(timestamp * 1000);
     }
-    var tag = document.createElement(smartdate.config.tagName);
+    tag = document.createElement(smartdate.config.tagName);
     tag.className = smartdate.config.className;
     tag.setAttribute('data-timestamp', timestamp);
+    tag.innerHTML = smartdate.format(date);
+    if (smartdate.config.addTitle) {
+      tag.setAttribute('title', date.toLocaleString());
+    }
     return tag;
   };
 

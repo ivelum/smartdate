@@ -178,6 +178,21 @@ to update datetime strings right after you updated date tags on the page.
 In such case call .render() - this is exactly the same function which .init() 
 uses internally to update everything.
 
+
+```js
+smartdate.tag(date)
+```
+
+Construct a smartdate tag using current configuration options. Input 
+can be an instance of Date object or unix timestamp in seconds. Returns HTML 
+element which you could paste into the DOM. Example for jQuery:
+ 
+```js
+$('<parent-element-selector>').append(smartdate.tag(947765593));
+```
+
+
+
 ## Report bugs
 
 Report issues to the project's [Issues Tracking on Github](https://github.com/ivelum/smartdate/issues).
