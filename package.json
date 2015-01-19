@@ -8,9 +8,9 @@
     "url": "https://github.com/ivelum/smartdate.git"
   },
   "scripts": {
-    "start": "node_modules/.bin/webpack --watch test/tests.js test/testBundle.js",
-    "build": "node_modules/.bin/webpack test/tests.js test/testBundle.js",
-    "phantom": "node_modules/.bin/webpack test/tests.js test/testBundle.js && node_modules/.bin/mocha-phantomjs test/tests.html",
+    "start": "node_modules/.bin/webpack --watch -d test/tests.js test/testBundle.js",
+    "build": "node_modules/.bin/webpack -d test/tests.js test/testBundle.js",
+    "phantom": "node_modules/.bin/webpack -d test/tests.js test/testBundle.js && node_modules/.bin/mocha-phantomjs test/tests.html",
     "uglify": "cat smartdate.js | node_modules/.bin/uglifyjs -cm > smartdate.min.js"
   },
   "devDependencies": {

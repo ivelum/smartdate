@@ -2,5 +2,5 @@
 .idea
 readme.html
 node_modules
-test/testBundle.js
+test/testBundle.js*
 npm-debug.log
