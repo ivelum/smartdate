@@ -161,6 +161,36 @@ updateInterval. These 3 can only be defined on global level.
 Configuration options can also be overridden in smartdate.format() and 
 smartdate.tag(), as described below.
 
+## Custom date formatting
+
+Smartdate performs date formatting by calling function with mode name in 
+smartdate.locale['<locale>'] object. Function is called with 2 parameters: 
+- date - instance of Date object, representing the date to be formatted;
+- fullMonthNames - boolean flag indicating current fullMonthNames setting.
+
+You can use this behaviour to create your own formatting functions or to 
+overwrite built-in ones. Note that you can re-use existing formatting 
+functions in current locale by referencing them with 'this'. 
+
+Examples:
+
+```js
+// Create a new 'special' mode in English locale
+smartdate.locale.en.special = function(date, fullMonthNames) {
+  return this.date(date, fullMonthNames) + ' | ' + this.time(date);
+};
+// Use 'special' mode as a default for all dates on the page
+smartdate.init({mode: 'special'});
+```
+
+```js
+// Overwrite built-in time formatting for all modes in Russian locale, 
+// display time with seconds.
+smartdate.locale.ru.originalTime = smartdate.locale.ru.time;
+smartdate.locale.ru.time = function(date) {
+  return this.originalTime(date) + ':' + smartdate.pad(date.getSeconds());
+};
+```
   
 ## API
 
@@ -193,6 +223,11 @@ Returns string representation of a date using current format and locale
 settings. Input can be an instance of Date object or unix timestamp in seconds.
 Accepts an optional second parameter, object with configuration options. 
 Options provided here take precedence of global configuration.
+
+```js
+smartdate.pad(num)
+```
+Utility function, pad given number with zero up to 2 digits.
 
 
 ```js

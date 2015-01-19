@@ -72,14 +72,14 @@
         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
       ],
 
-      dateFormat: function(date, fullMonthNames) {
+      date: function(date, fullMonthNames) {
         var months = fullMonthNames ? this.months : this.monthsShort;
         return months[date.getMonth()] + ' ' +
             date.getDate() + ', ' +
             date.getFullYear();
       },
 
-      timeFormat: function(date) {
+      time: function(date) {
         var hours = date.getHours();
         var minutes = date.getMinutes();
         var ampm = hours >= 12 ? 'pm' : 'am';
@@ -89,12 +89,11 @@
         return hours + ':' + minutes + ' ' + ampm;
       },
 
-      datetimeFormat: function(date, fullMonthNames) {
-        return this.dateFormat(date, fullMonthNames) +
-            ' at ' + this.timeFormat(date);
+      datetime: function(date, fullMonthNames) {
+        return this.date(date, fullMonthNames) + ' at ' + this.time(date);
       },
 
-      pastFormat: function(date) {
+      past: function(date, fullMonthNames) {
         var now = smartdate.now();
         var sec = (now.getTime() - date.getTime()) / 1000;
 
@@ -103,13 +102,14 @@
         } else if (sec < 60 * 60) {
           return Math.floor(sec / 60) + ' min ago';
         } else if (daysBetween(now, date) === 0) {
-          return 'today at ' + this.timeFormat(date);
+          return 'today at ' + this.time(date);
         } else if (daysBetween(now, date) === -1) {
-          return 'yesterday at ' + this.timeFormat(date);
+          return 'yesterday at ' + this.time(date);
         }
+        return this.date(date, fullMonthNames);
       },
 
-      futureFormat: function(date) {
+      future: function(date, fullMonthNames) {
         var now = smartdate.now();
         var sec = (date.getTime() - now.getTime()) / 1000;
 
@@ -118,10 +118,11 @@
         } else if (sec < 60 * 60) {
           return 'in ' + Math.floor(sec / 60) + ' min';
         } else if (daysBetween(now, date) === 0) {
-          return 'today at ' + this.timeFormat(date);
+          return 'today at ' + this.time(date);
         } else if (daysBetween(now, date) === 1) {
-          return 'tomorrow at ' + this.timeFormat(date);
+          return 'tomorrow at ' + this.time(date);
         }
+        return this.date(date, fullMonthNames);
       }
     },
 
@@ -136,23 +137,22 @@
         'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'
       ],
 
-      dateFormat: function(date, fullMonthNames) {
+      date: function(date, fullMonthNames) {
         var months = fullMonthNames ? this.months : this.monthsShort;
         return date.getDate() + ' ' +
             months[date.getMonth()] + ' ' +
             date.getFullYear();
       },
 
-      timeFormat: function(date) {
+      time: function(date) {
         return pad(date.getHours()) + ':' + pad(date.getMinutes());
       },
 
-      datetimeFormat: function(date, fullMonthNames) {
-        return this.dateFormat(date, fullMonthNames) +
-            ' в ' + this.timeFormat(date);
+      datetime: function(date, fullMonthNames) {
+        return this.date(date, fullMonthNames) + ' в ' + this.time(date);
       },
 
-      pastFormat: function(date) {
+      past: function(date, fullMonthNames) {
         var now = smartdate.now();
         var sec = (now.getTime() - date.getTime()) / 1000;
 
@@ -161,13 +161,14 @@
         } else if (sec < 60 * 60) {
           return Math.floor(sec / 60) + ' мин назад';
         } else if (daysBetween(now, date) === 0) {
-          return 'сегодня в ' + this.timeFormat(date);
+          return 'сегодня в ' + this.time(date);
         } else if (daysBetween(now, date) === -1) {
-          return 'вчера в ' + this.timeFormat(date);
+          return 'вчера в ' + this.time(date);
         }
+        return this.date(date, fullMonthNames);
       },
 
-      futureFormat: function(date) {
+      future: function(date, fullMonthNames) {
         var now = smartdate.now();
         var sec = (date.getTime() - now.getTime()) / 1000;
 
@@ -176,10 +177,11 @@
         } else if (sec < 60 * 60) {
           return 'через ' + Math.floor(sec / 60) + ' мин';
         } else if (daysBetween(now, date) === 0) {
-          return 'сегодня в ' + this.timeFormat(date);
+          return 'сегодня в ' + this.time(date);
         } else if (daysBetween(now, date) === 1) {
-          return 'завтра в ' + this.timeFormat(date);
+          return 'завтра в ' + this.time(date);
         }
+        return this.date(date, fullMonthNames);
       }
     }
   };
@@ -205,6 +207,14 @@
     return options;
   };
 
+  smartdate.auto = function(locale, date, fullMonthNames) {
+    if (date.getTime() > smartdate.now().getTime()) {
+      return locale.future(date, fullMonthNames);
+    } else {
+      return locale.past(date, fullMonthNames);
+    }
+  };
+
   /**
    * String format of Date object or unix timestamp using current settings
    *
@@ -225,26 +235,13 @@
       date = new Date(date * 1000);
     }
     options = smartdate.getOptions(options);
-    var dateText = null,
-        locale = smartdate.getLocale(options.locale),
-        nowTimestamp = smartdate.now().getTime(),
-        timestamp = date.getTime();
-    if (options.mode === 'date') {
-      dateText = locale.dateFormat(date, options.fullMonthNames);
-    } else if (options.mode === 'datetime') {
-      dateText = locale.datetimeFormat(date, options.fullMonthNames);
+    var dateText,
+        locale = smartdate.getLocale(options.locale);
+    if (!(options.mode && typeof locale[options.mode] === 'function')) {
+      // default is auto mode
+      dateText = smartdate.auto(locale, date, options.fullMonthNames);
     } else {
-      if (options.mode === 'past') {
-        timestamp = nowTimestamp - 1;
-      } else if (options.mode === 'future') {
-        timestamp = nowTimestamp + 1;
-      }
-      if (timestamp > nowTimestamp) {
-        dateText = locale.futureFormat(date);
-      } else {
-        dateText = locale.pastFormat(date);
-      }
-      dateText = dateText || locale.dateFormat(date, options.fullMonthNames);
+      dateText = locale[options.mode](date, options.fullMonthNames);
     }
     if (options.capitalize) {
       dateText = dateText.charAt(0).toUpperCase() + dateText.slice(1);

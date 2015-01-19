@@ -1,6 +1,7 @@
 'use strict';
 
-var merge = require('merge'),
+var customFormats = require('./include/customFormats'),
+    merge = require('merge'),
     smartdate = require('../smartdate'),
     formatEn = require('./include/formatEn'),
     formatRu = require('./include/formatRu');
@@ -9,11 +10,13 @@ describe('smartdate', function(){
   describe('format()', function(){
 
     var originalConfig,
+        originalLocale,
         originalNow;
 
     before(function(){
-      // save default config
+      // save default config and locale
       originalConfig = merge({}, smartdate.config);
+      originalLocale = merge({}, smartdate.locale);
       // mock and freeze now(), so tests always run in the same conditions
       originalNow = smartdate.now;
       smartdate.now = function() {
@@ -24,12 +27,14 @@ describe('smartdate', function(){
     beforeEach(function(){
       // restore default config
       smartdate.config = merge({}, originalConfig);
+      smartdate.locale = merge({}, originalLocale);
     });
 
     after(function(){
-      // restore now() and config
+      // restore everything
       smartdate.now = originalNow;
       smartdate.config = merge({}, originalConfig);
+      smartdate.locale = merge({}, originalLocale);
     });
 
     describe('locale: "en"', function(){
@@ -41,6 +46,10 @@ describe('smartdate', function(){
         smartdate.setup({locale: 'ru'});
       });
       formatRu(smartdate);
+    });
+
+    describe('custom formats', function(){
+      customFormats(smartdate);
     });
 
   });
