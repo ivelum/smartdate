@@ -190,6 +190,9 @@ smartdate.locale.ru.originalTime = smartdate.locale.ru.time;
 smartdate.locale.ru.time = function(date) {
   return this.originalTime(date) + ':' + smartdate.pad(date.getSeconds());
 };
+// since .time() is used internally by 'auto', 'future', 'past' and 'datetime'
+// modes, we now have all of them displaying time with seconds. 
+smartdate.init();
 ```
   
 ## API
