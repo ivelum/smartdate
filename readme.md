@@ -166,20 +166,21 @@ smartdate.tag(), as described below.
 ```js
 smartdate.init()
 // or
-smartdate.init(paramsObj)
+smartdate.init(options)
 ```
 Inititalize smartdate. Takes an optional parameter, object with configuration
 options. It basically does the following:
-  1. performs parameters configuration using .setup(); 
+  1. performs options configuration using .setup(); 
   2. immediately renders all date tags found on the page using .render() method;
   3. schedules .render() to run every updateInterval milliseconds (optional). 
 See Usage and Configuration options above for details.
 
 
 ```js
-smartdate.setup(paramsObj)
+smartdate.setup(options)
 ```
-Configure smartdate. See Configuration options above for details.
+Configure smartdate, takes object with configuration options as a parameter. 
+See Configuration options above for details.
 
 
 ```js
