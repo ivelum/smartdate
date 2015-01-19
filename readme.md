@@ -164,7 +164,7 @@ smartdate.tag(), as described below.
 ## Custom date formatting
 
 Smartdate performs date formatting by calling function with mode name in 
-smartdate.locale['<locale>'] object. Function is called with 2 parameters: 
+smartdate.locale['\<locale\>'] object. Function is called with 2 parameters: 
 - date - instance of Date object, representing the date to be formatted;
 - fullMonthNames - boolean flag indicating current fullMonthNames setting.
 
