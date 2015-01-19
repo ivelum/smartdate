@@ -5,7 +5,7 @@ for displaying date and time in users' timezones, in human-friendly
 format. Datetime string is updated dynamically without page reload. This
 is fast, tested with hundreds of date objects on a single page.
 
-Supported Languages: English, Russian.
+Built-in locales: English, Russian. Additional locales can be added easily. 
 
 Browser compatibility: tested in IE8+, Chrome, Firefox, Safari and
 Opera.
@@ -101,18 +101,18 @@ and schedules itself to update them every 5 seconds (configurable).
 ## Configuration options
 
 smartdate.init() takes an optional parameter, object with configuration
-options. For example, if you'd like to switch language to Russian,
+options. For example, if you'd like to switch locale to Russian,
 initialize smartdate as following:
 
 ```js
 smartdate.init({
-  language: 'ru'
+  locale: 'ru'
 });
 ```
 
 All configuration options:
 
-- **language** - 'en' or 'ru'. Default is 'en';
+- **locale** - 'en' or 'ru'. Default is 'en';
 - **mode** - 'auto', 'date', 'past' or 'future'. Default is 'auto'. Defines how
   smartdate renders datetime text. 
     * *auto* - use human-friendly time string for nearest date and time, 
@@ -189,7 +189,7 @@ smartdate.format(date)
 // or
 smartdate.format(date, options)
 ```
-Returns string representation of a date using current format and language 
+Returns string representation of a date using current format and locale 
 settings. Input can be an instance of Date object or unix timestamp in seconds.
 Accepts an optional second parameter, object with configuration options. 
 Options provided here take precedence of global configuration.

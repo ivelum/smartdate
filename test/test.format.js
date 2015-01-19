@@ -32,13 +32,13 @@ describe('smartdate', function(){
       smartdate.config = merge({}, originalConfig);
     });
 
-    describe('language: "en"', function(){
+    describe('locale: "en"', function(){
       formatEn(smartdate);
     });
 
-    describe('language: "ru"', function(){
+    describe('locale: "ru"', function(){
       beforeEach(function(){
-        smartdate.setup({language: 'ru'});
+        smartdate.setup({locale: 'ru'});
       });
       formatRu(smartdate);
     });

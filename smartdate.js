@@ -20,7 +20,7 @@
     version: '0.8.1',
 
     config: {
-      language: 'en',
+      locale: 'en',
 
       tagName: 'span',
 
@@ -184,12 +184,12 @@
     }
   };
 
-  smartdate.getLocale = function(language) {
-    language = language || smartdate.config.language;
-    if (typeof language === 'string') {
-      language = language.toLowerCase();
-      if (smartdate.locale.hasOwnProperty(language)) {
-        return smartdate.locale[language];
+  smartdate.getLocale = function(locale) {
+    locale = locale || smartdate.config.locale;
+    if (typeof locale === 'string') {
+      locale = locale.toLowerCase();
+      if (smartdate.locale.hasOwnProperty(locale)) {
+        return smartdate.locale[locale];
       }
     }
     return smartdate.locale['en'];
@@ -211,7 +211,7 @@
    * @param {Date|number} date - Date object or unix timestamp (in seconds)
    * @param {object} options - optional, object with configuration options
    * @return {string|null} - string representation of date made with current
-   *                         format and language settings,
+   *                         format and locale settings,
    *                         or null if input is incorrect
    */
   smartdate.format = function(date, options) {
@@ -226,7 +226,7 @@
     }
     options = smartdate.getOptions(options);
     var dateText = null,
-        locale = smartdate.getLocale(options.language),
+        locale = smartdate.getLocale(options.locale),
         nowTimestamp = smartdate.now().getTime(),
         timestamp = date.getTime();
     if (options.mode === 'date') {

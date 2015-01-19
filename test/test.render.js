@@ -42,7 +42,7 @@ describe('smartdate', function(){
       var el;
       testArea.innerHTML = '<span class="smartdate" ' +
           'data-timestamp="947765593" ' +
-          'data-language="RU" ' +
+          'data-locale="RU" ' +
           'data-Mode="future" ' +
           'data-cApiTalize="True" ' +
           'data-addTitle="false" ' +
