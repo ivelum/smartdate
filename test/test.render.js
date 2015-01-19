@@ -38,6 +38,21 @@ describe('smartdate', function(){
       expect(el.getAttribute('title')).to.equal(date.toLocaleString());
     });
 
+    it('should accept configuration options in data-attributes', function(){
+      var el;
+      testArea.innerHTML = '<span class="smartdate" ' +
+          'data-timestamp="947765593" ' +
+          'data-language="RU" ' +
+          'data-Mode="future" ' +
+          'data-cApiTalize="True" ' +
+          'data-addTitle="false" ' +
+          '></span>';
+      smartdate.render();
+      el = testArea.childNodes[0];
+      expect(el.innerHTML).to.equal('В течение минуты');
+      expect(el.getAttribute('title')).to.not.be.ok();
+    });
+
   });
 
 });

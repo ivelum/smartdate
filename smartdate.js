@@ -185,15 +185,26 @@
     return smartdate.locale['en'];
   };
 
+  smartdate.getOptions = function(options) {
+    options = options || {};
+    for (var o in smartdate.config) {
+      if (smartdate.config.hasOwnProperty(o) && !options.hasOwnProperty(o)) {
+        options[o] = smartdate.config[o];
+      }
+    }
+    return options;
+  };
+
   /**
    * String format of Date object or unix timestamp using current settings
    *
    * @param {Date|number} date - Date object or unix timestamp (in seconds)
+   * @param {object} options - optional, object with configuration options
    * @return {string|null} - string representation of date made with current
    *                         format and language settings,
    *                         or null if input is incorrect
    */
-  smartdate.format = function(date) {
+  smartdate.format = function(date, options) {
     if (!(date instanceof Date)) {
       if (typeof date === 'string') {
         date = Number(date);
@@ -203,15 +214,15 @@
       }
       date = new Date(date * 1000);
     }
+    options = smartdate.getOptions(options);
     var dateText = null,
-        locale = smartdate.getLocale(),
-        config = smartdate.config,
+        locale = smartdate.getLocale(options.language),
         nowTimestamp = smartdate.now().getTime(),
         timestamp = date.getTime();
-    if (config.mode !== 'date') {
-      if (config.mode === 'past') {
+    if (options.mode !== 'date') {
+      if (options.mode === 'past') {
         timestamp = nowTimestamp - 1;
-      } else if (config.mode === 'future') {
+      } else if (options.mode === 'future') {
         timestamp = nowTimestamp + 1;
       }
       if (timestamp > nowTimestamp) {
@@ -220,37 +231,49 @@
         dateText = locale.pastFormat(date);
       }
     }
-    dateText = dateText || locale.dateFormat(date, config.fullMonthNames);
-    if (config.capitalize) {
+    dateText = dateText || locale.dateFormat(date, options.fullMonthNames);
+    if (options.capitalize) {
       dateText = dateText.charAt(0).toUpperCase() + dateText.slice(1);
     }
     return dateText;
   };
 
   smartdate.render = function() {
-    var selector = smartdate.config.tagName + '.' + smartdate.config.className,
+    var config = smartdate.config,
+        date,
+        selector = config.tagName + '.' + config.className,
         elements = document.querySelectorAll(selector),
         el,
-        timestamp,
-        date;
+        options,
+        optionValue,
+        timestamp;
     for (var i = 0, l = elements.length; i < l; i++) {
       el = elements[i];
       timestamp = +el.getAttribute('data-timestamp');
+
+      // extract custom options from data-attributes
+      options = {};
+      for (var o in config) {
+        if (config.hasOwnProperty(o) && el.hasAttribute('data-' + o)) {
+          optionValue = el.getAttribute('data-' + o).toLowerCase();
+          if (typeof config[o] === 'boolean') {
+            optionValue = (optionValue === 'true');
+          }
+          options[o] = optionValue;
+        }
+      }
+      options = smartdate.getOptions(options);
+
       date = new Date(timestamp * 1000);
-      el.innerHTML = smartdate.format(date);
-      if (smartdate.config.addTitle) {
+      el.innerHTML = smartdate.format(date, options);
+      if (options.addTitle) {
         el.setAttribute('title', date.toLocaleString());
       }
     }
   };
 
   smartdate.setup = function(options) {
-    options = options || {};
-    for (var o in options) {
-      if (options.hasOwnProperty(o)) {
-        smartdate.config[o] = options[o];
-      }
-    }
+    smartdate.config = smartdate.getOptions(options);
   };
 
   smartdate.init = function(options) {
@@ -261,7 +284,7 @@
     }
   };
 
-  smartdate.tag = function(date) {
+  smartdate.tag = function(date, options) {
     var tag,
         timestamp;
     if (date instanceof Date) {
@@ -274,8 +297,9 @@
     tag = document.createElement(smartdate.config.tagName);
     tag.className = smartdate.config.className;
     tag.setAttribute('data-timestamp', timestamp);
-    tag.innerHTML = smartdate.format(date);
-    if (smartdate.config.addTitle) {
+    options = smartdate.getOptions(options);
+    tag.innerHTML = smartdate.format(date, options);
+    if (options.addTitle) {
       tag.setAttribute('title', date.toLocaleString());
     }
     return tag;
