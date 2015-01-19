@@ -2,7 +2,8 @@
 
 var merge = require('merge'),
     smartdate = require('../smartdate'),
-    formatEn = require('./include/formatEn');
+    formatEn = require('./include/formatEn'),
+    formatRu = require('./include/formatRu');
 
 describe('smartdate', function(){
   describe('format()', function(){
@@ -31,7 +32,16 @@ describe('smartdate', function(){
       smartdate.config = merge({}, originalConfig);
     });
 
-    formatEn(smartdate);
+    describe('language: "en"', function(){
+      formatEn(smartdate);
+    });
+
+    describe('language: "ru"', function(){
+      beforeEach(function(){
+        smartdate.setup({language: 'ru'});
+      });
+      formatRu(smartdate);
+    });
 
   });
 });
