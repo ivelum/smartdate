@@ -118,7 +118,8 @@ All configuration options:
     * *auto* - use human-friendly time string for nearest date and time, 
       from yesterday to tomorrow, like shown on examples above. Use date, 
       if date is outside of yesterday <-> tomorrow interval;
-    * *date* -  always show dates, even for nearest date and time; 
+    * *date* - always show dates, even for nearest date and time; 
+    * *datetime* - show date and time up to minutes; 
     * *past* - prevent future dates from being shown. If the date is in the 
       future, 'less than a minute ago' will be shown (or its equivalent in 
       Russian). This could be helpful to deal with inaccurate clock on user

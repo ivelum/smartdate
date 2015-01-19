@@ -56,16 +56,6 @@
     return n < 10 ? '0' + n : n;
   };
 
-  var formatAMPM = smartdate.formatAMPM = function(date) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = pad(minutes);
-    return hours + ':' + minutes + ' ' + ampm;
-  };
-
   smartdate.now = function() {
     return new Date();
   };
@@ -82,11 +72,26 @@
         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
       ],
 
-      dateFormat: function(dt, fullMonthNames) {
+      dateFormat: function(date, fullMonthNames) {
         var months = fullMonthNames ? this.months : this.monthsShort;
-        return months[dt.getMonth()] + ' ' +
-            dt.getDate() + ', ' +
-            dt.getFullYear();
+        return months[date.getMonth()] + ' ' +
+            date.getDate() + ', ' +
+            date.getFullYear();
+      },
+
+      timeFormat: function(date) {
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = pad(minutes);
+        return hours + ':' + minutes + ' ' + ampm;
+      },
+
+      datetimeFormat: function(date, fullMonthNames) {
+        return this.dateFormat(date, fullMonthNames) +
+            ' at ' + this.timeFormat(date);
       },
 
       pastFormat: function(date) {
@@ -98,9 +103,9 @@
         } else if (sec < 60 * 60) {
           return Math.floor(sec / 60) + ' min ago';
         } else if (daysBetween(now, date) === 0) {
-          return 'today at ' + formatAMPM(date);
+          return 'today at ' + this.timeFormat(date);
         } else if (daysBetween(now, date) === -1) {
-          return 'yesterday at ' + formatAMPM(date);
+          return 'yesterday at ' + this.timeFormat(date);
         }
       },
 
@@ -113,9 +118,9 @@
         } else if (sec < 60 * 60) {
           return 'in ' + Math.floor(sec / 60) + ' min';
         } else if (daysBetween(now, date) === 0) {
-          return 'today at ' + formatAMPM(date);
+          return 'today at ' + this.timeFormat(date);
         } else if (daysBetween(now, date) === 1) {
-          return 'tomorrow at ' + formatAMPM(date);
+          return 'tomorrow at ' + this.timeFormat(date);
         }
       }
     },
@@ -131,11 +136,20 @@
         'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'
       ],
 
-      dateFormat: function(dt, fullMonthNames) {
+      dateFormat: function(date, fullMonthNames) {
         var months = fullMonthNames ? this.months : this.monthsShort;
-        return dt.getDate() + ' ' +
-            months[dt.getMonth()] + ' ' +
-            dt.getFullYear();
+        return date.getDate() + ' ' +
+            months[date.getMonth()] + ' ' +
+            date.getFullYear();
+      },
+
+      timeFormat: function(date) {
+        return pad(date.getHours()) + ':' + pad(date.getMinutes());
+      },
+
+      datetimeFormat: function(date, fullMonthNames) {
+        return this.dateFormat(date, fullMonthNames) +
+            ' в ' + this.timeFormat(date);
       },
 
       pastFormat: function(date) {
@@ -147,11 +161,9 @@
         } else if (sec < 60 * 60) {
           return Math.floor(sec / 60) + ' мин назад';
         } else if (daysBetween(now, date) === 0) {
-          return 'сегодня в ' + pad(date.getHours()) +
-              ':' + pad(date.getMinutes());
+          return 'сегодня в ' + this.timeFormat(date);
         } else if (daysBetween(now, date) === -1) {
-          return 'вчера в ' + pad(date.getHours()) +
-              ':' + pad(date.getMinutes());
+          return 'вчера в ' + this.timeFormat(date);
         }
       },
 
@@ -164,11 +176,9 @@
         } else if (sec < 60 * 60) {
           return 'через ' + Math.floor(sec / 60) + ' мин';
         } else if (daysBetween(now, date) === 0) {
-          return 'сегодня в ' + pad(date.getHours()) +
-              ':' + pad(date.getMinutes());
+          return 'сегодня в ' + this.timeFormat(date);
         } else if (daysBetween(now, date) === 1) {
-          return 'завтра в ' + pad(date.getHours()) +
-              ':' + pad(date.getMinutes());
+          return 'завтра в ' + this.timeFormat(date);
         }
       }
     }
@@ -219,7 +229,11 @@
         locale = smartdate.getLocale(options.language),
         nowTimestamp = smartdate.now().getTime(),
         timestamp = date.getTime();
-    if (options.mode !== 'date') {
+    if (options.mode === 'date') {
+      dateText = locale.dateFormat(date, options.fullMonthNames);
+    } else if (options.mode === 'datetime') {
+      dateText = locale.datetimeFormat(date, options.fullMonthNames);
+    } else {
       if (options.mode === 'past') {
         timestamp = nowTimestamp - 1;
       } else if (options.mode === 'future') {
@@ -230,8 +244,8 @@
       } else {
         dateText = locale.pastFormat(date);
       }
+      dateText = dateText || locale.dateFormat(date, options.fullMonthNames);
     }
-    dateText = dateText || locale.dateFormat(date, options.fullMonthNames);
     if (options.capitalize) {
       dateText = dateText.charAt(0).toUpperCase() + dateText.slice(1);
     }
