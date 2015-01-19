@@ -229,3 +229,8 @@ $('<selector>').append(smartdate.tag(947765593));
 ## Report bugs
 
 Report issues to the project's [Issues Tracking on Github](https://github.com/ivelum/smartdate/issues).
+
+
+## License
+
+MIT
