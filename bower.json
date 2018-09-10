@@ -1,7 +1,0 @@
-{
-  "name": "smartdate",
-  "version": "0.9.0",
-  "dependencies": {},
-  "main": "smartdate.js",
-  "ignore": {}
-}
